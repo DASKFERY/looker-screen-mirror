@@ -1,0 +1,11 @@
+{
+  "name": "looker-screen-mirror",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "capture": "node capture.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.55.0"
+  }
+}
