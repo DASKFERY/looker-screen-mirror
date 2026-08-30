@@ -41,6 +41,10 @@ const screens = [
   {
     id: 10,
     url: "https://datastudio.google.com/embed/reporting/a1a9f205-8585-43eb-a148-d14f9932992e/page/KTRUF"
+  },
+  {
+    id: 11,
+    url: "https://lookerstudio.google.com/reporting/4a5fb43f-a6ba-4ece-8da6-3999c4edf45b"
   }
 ];
 
