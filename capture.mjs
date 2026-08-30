@@ -40,7 +40,7 @@ const screens = [
   },
   {
     id: 10,
-    url: "https://lookerstudio.google.com/reporting/a1a9f205-8585-43eb-a148-d14f9932992e"
+    url: "https://datastudio.google.com/embed/reporting/a1a9f205-8585-43eb-a148-d14f9932992e/page/KTRUF"
   }
 ];
 
