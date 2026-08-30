@@ -51,15 +51,15 @@ const browser = await chromium.launch({
   args: ["--disable-dev-shm-usage", "--no-sandbox"]
 });
 
-try {
-  for (const screen of screens) {
-    const context = await browser.newContext({
-      viewport: { width: 1920, height: 1080 },
-      deviceScaleFactor: 1,
-      locale: "ar-SA",
-      timezoneId: "Asia/Riyadh"
-    });
+async function captureScreen(screen) {
+  const context = await browser.newContext({
+    viewport: { width: 1920, height: 1080 },
+    deviceScaleFactor: 1,
+    locale: "ar-SA",
+    timezoneId: "Asia/Riyadh"
+  });
 
+  try {
     const page = await context.newPage();
     console.log(`Capturing screen ${screen.id}`);
 
@@ -75,8 +75,15 @@ try {
       type: "png",
       fullPage: false
     });
-
+  } finally {
     await context.close();
+  }
+}
+
+try {
+  const batchSize = 3;
+  for (let index = 0; index < screens.length; index += batchSize) {
+    await Promise.all(screens.slice(index, index + batchSize).map(captureScreen));
   }
 } finally {
   await browser.close();
