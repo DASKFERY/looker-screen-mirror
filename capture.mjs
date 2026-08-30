@@ -37,6 +37,10 @@ const screens = [
   {
     id: 9,
     url: "https://lookerstudio.google.com/reporting/127d88ad-1d6d-43d6-8d38-421bad7831cd"
+  },
+  {
+    id: 10,
+    url: "https://lookerstudio.google.com/reporting/a1a9f205-8585-43eb-a148-d14f9932992e"
   }
 ];
 
