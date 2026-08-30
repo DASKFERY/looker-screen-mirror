@@ -17,6 +17,14 @@ const screens = [
   {
     id: 4,
     url: "https://datastudio.google.com/reporting/3f4d1c90-1f96-490c-9b6d-68471afd6a56/page/KTRUF"
+  },
+  {
+    id: 5,
+    url: "https://lookerstudio.google.com/reporting/7a6af095-c2e2-4f17-a486-7a394f0ae569"
+  },
+  {
+    id: 6,
+    url: "https://datastudio.google.com/embed/reporting/c0c00308-e350-4a66-8e04-91686042ae11"
   }
 ];
 
