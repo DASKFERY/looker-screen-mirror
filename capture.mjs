@@ -63,12 +63,16 @@ async function captureScreen(screen) {
     const page = await context.newPage();
     console.log(`Capturing screen ${screen.id}`);
 
-    await page.goto(screen.url, {
-      waitUntil: "domcontentloaded",
-      timeout: 120000
-    });
+    try {
+      await page.goto(screen.url, {
+        waitUntil: "domcontentloaded",
+        timeout: 45000
+      });
+    } catch (error) {
+      console.warn(`Screen ${screen.id} navigation timed out; capturing current view.`);
+    }
 
-    await page.waitForTimeout(30000);
+    await page.waitForTimeout(15000);
 
     await page.screenshot({
       path: `site/screens/screen-${screen.id}.png`,
@@ -81,7 +85,7 @@ async function captureScreen(screen) {
 }
 
 try {
-  const batchSize = 3;
+  const batchSize = 5;
   for (let index = 0; index < screens.length; index += batchSize) {
     await Promise.all(screens.slice(index, index + batchSize).map(captureScreen));
   }
