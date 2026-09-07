@@ -73,6 +73,46 @@ const screens = [
   {
     id: 18,
     url: "https://lookerstudio.google.com/reporting/38b4b54b-8e29-4f89-94bd-ffa2d17277bc"
+  },
+  {
+    id: 19,
+    url: "https://lookerstudio.google.com/reporting/0195256f-1596-4069-8e01-8ec7d7692b5a"
+  },
+  {
+    id: 20,
+    url: "https://lookerstudio.google.com/reporting/eed5fdd7-ff11-4730-8780-98fae76c03e1"
+  },
+  {
+    id: 21,
+    url: "https://lookerstudio.google.com/reporting/3c064fb3-7076-4393-b8ff-440a2d34e374"
+  },
+  {
+    id: 22,
+    url: "https://lookerstudio.google.com/u/0/reporting/75856ee6-c62f-48ca-9fe8-84972b12266e/page/KTRUF"
+  },
+  {
+    id: 23,
+    url: "https://lookerstudio.google.com/reporting/07fb2ff5-e4b7-4cde-8426-38eeed88d5b3"
+  },
+  {
+    id: 24,
+    url: "https://lookerstudio.google.com/reporting/92560f8b-cab5-409c-8d1f-d1eba04e7766"
+  },
+  {
+    id: 25,
+    url: "https://lookerstudio.google.com/reporting/ddd05dfb-b099-47fc-888e-5fb2e8fe559a"
+  },
+  {
+    id: 26,
+    url: "https://lookerstudio.google.com/reporting/127d88ad-1d6d-43d6-8d38-421bad7831cd"
+  },
+  {
+    id: 27,
+    url: "https://lookerstudio.google.com/reporting/8e113d57-6d47-448f-87e4-75cd5c9eed8a"
+  },
+  {
+    id: 28,
+    url: "https://datastudio.google.com/reporting/890ce08d-d629-49f4-a8fe-d114682eb211"
   }
 ];
 
