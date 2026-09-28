@@ -3,45 +3,182 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>شاشات التقارير</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <title>مركز مراقبة شاشات البلديات</title>
   <style>
-    body{font-family:Arial,sans-serif;background:#101318;color:#fff;margin:0;padding:40px}
-    h1{margin-top:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(240px,1fr));gap:20px}
-    a{display:block;padding:28px;border-radius:14px;background:#1d2430;color:#fff;text-decoration:none;font-size:24px}
-    a:hover{background:#273246}
+    :root{
+      --bg:#07110f;--panel:#0d1b18;--panel2:#10241f;--line:#1e4339;
+      --green:#20b486;--green2:#64d6b5;--text:#f3fbf8;--muted:#9bb8af;
+      --shadow:0 18px 45px rgba(0,0,0,.28)
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:
+      radial-gradient(circle at 90% -10%,rgba(32,180,134,.18),transparent 30%),
+      linear-gradient(180deg,#07110f 0%,#091512 100%);color:var(--text)}
+    .topbar{position:sticky;top:0;z-index:20;background:rgba(7,17,15,.92);backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(100,214,181,.16)}
+    .header{max-width:1800px;margin:auto;padding:18px 28px;display:flex;align-items:center;gap:22px}
+    .brand{display:flex;align-items:center;gap:14px;min-width:max-content}
+    .logo{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--green),#0c7659);box-shadow:0 10px 25px rgba(32,180,134,.28)}
+    .logo svg{width:27px;height:27px;fill:none;stroke:white;stroke-width:1.8}
+    h1{font-size:22px;margin:0 0 4px}.subtitle{font-size:13px;color:var(--muted)}
+    .tools{margin-right:auto;display:flex;align-items:center;gap:12px}
+    .search{width:min(360px,32vw);background:#0b1815;border:1px solid var(--line);color:var(--text);
+      padding:12px 15px;border-radius:12px;font-size:15px;outline:none}
+    .search:focus{border-color:var(--green)}
+    .refresh{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:11px 15px;
+      border-radius:12px;cursor:pointer;font-weight:700}
+    .refresh:hover{border-color:var(--green);color:var(--green2)}
+    main{max-width:1800px;margin:auto;padding:26px 28px 50px}
+    .summary{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+    .pill{display:flex;align-items:center;gap:9px;padding:10px 14px;background:rgba(16,36,31,.85);
+      border:1px solid var(--line);border-radius:999px;color:var(--muted);font-size:14px}
+    .pill strong{color:var(--text)}.dot{width:9px;height:9px;border-radius:50%;background:var(--green);
+      box-shadow:0 0 0 5px rgba(32,180,134,.12)}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(260px,1fr));gap:20px}
+    .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid rgba(100,214,181,.16);
+      border-radius:17px;overflow:hidden;box-shadow:var(--shadow);transition:.22s ease}
+    .card:hover{transform:translateY(-4px);border-color:rgba(100,214,181,.52)}
+    .preview{position:relative;aspect-ratio:16/9;background:#020504;overflow:hidden;cursor:pointer}
+    .preview img{width:100%;height:100%;display:block;object-fit:contain;transition:transform .3s ease}
+    .card:hover .preview img{transform:scale(1.015)}
+    .screen-no{position:absolute;top:10px;right:10px;background:rgba(4,12,10,.78);border:1px solid rgba(255,255,255,.15);
+      padding:6px 9px;border-radius:9px;font-size:12px;font-weight:700;backdrop-filter:blur(8px)}
+    .live{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:6px;background:rgba(4,12,10,.78);
+      padding:6px 9px;border-radius:9px;font-size:11px;color:#bff5e5}
+    .live:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green)}
+    .card-body{padding:15px 17px 17px}.municipality{font-size:17px;font-weight:800;margin:0 0 7px}
+    .meta{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}
+    .open-link{color:var(--green2);text-decoration:none;font-weight:700}.open-link:hover{text-decoration:underline}
+    .empty{display:none;text-align:center;color:var(--muted);padding:70px 20px}
+    .modal{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:28px}
+    .modal.open{display:flex}.modal-box{width:min(96vw,1700px)}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .modal-title{font-size:20px;font-weight:800}.close{border:1px solid #35534b;background:#13231f;color:white;
+      width:42px;height:42px;border-radius:12px;font-size:24px;cursor:pointer}
+    .modal img{display:block;width:100%;max-height:82vh;object-fit:contain;background:#000;border-radius:14px;
+      border:1px solid #29463f}
+    @media(max-width:1300px){.grid{grid-template-columns:repeat(3,minmax(250px,1fr))}}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(220px,1fr))}.header{flex-wrap:wrap}.tools{width:100%;margin:0}.search{flex:1;width:auto}}
+    @media(max-width:570px){.grid{grid-template-columns:1fr}.header,main{padding-left:15px;padding-right:15px}h1{font-size:18px}}
   </style>
 </head>
 <body>
-  <h1>شاشات التقارير</h1>
-  <div class="grid">
-    <a href="screen-1.html">الشاشة 1</a>
-    <a href="screen-2.html">الشاشة 2</a>
-    <a href="screen-3.html">الشاشة 3</a>
-    <a href="screen-4.html">الشاشة 4</a>
-    <a href="screen-5.html">الشاشة 5</a>
-    <a href="screen-6.html">الشاشة 6</a>
-    <a href="screen-7.html">الشاشة 7</a>
-    <a href="screen-8.html">الشاشة 8</a>
-    <a href="screen-9.html">الشاشة 9</a>
-    <a href="screen-10.html">الشاشة 10</a>
-    <a href="screen-11.html">الشاشة 11</a>
-    <a href="screen-12.html">الشاشة 12</a>
-    <a href="screen-13.html">الشاشة 13</a>
-    <a href="screen-14.html">الشاشة 14</a>
-    <a href="screen-15.html">الشاشة 15</a>
-    <a href="screen-16.html">الشاشة 16</a>
-    <a href="screen-17.html">الشاشة 17</a>
-    <a href="screen-18.html">الشاشة 18</a>
-    <a href="screen-19.html">الشاشة 19</a>
-    <a href="screen-20.html">الشاشة 20</a>
-    <a href="screen-21.html">الشاشة 21</a>
-    <a href="screen-22.html">الشاشة 22</a>
-    <a href="screen-23.html">الشاشة 23</a>
-    <a href="screen-24.html">الشاشة 24</a>
-    <a href="screen-25.html">الشاشة 25</a>
-    <a href="screen-26.html">الشاشة 26</a>
-    <a href="screen-27.html">الشاشة 27</a>
-    <a href="screen-28.html">الشاشة 28</a>
+  <div class="topbar">
+    <div class="header">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 21h10M12 18v3M7 13l3-3 3 2 4-5"/></svg>
+        </div>
+        <div>
+          <h1>مركز مراقبة شاشات البلديات</h1>
+          <div class="subtitle">متابعة موحّدة لجميع لوحات البيانات</div>
+        </div>
+      </div>
+      <div class="tools">
+        <input id="search" class="search" type="search" placeholder="ابحث باسم البلدية أو رقم الشاشة…" aria-label="بحث">
+        <button class="refresh" id="refresh" type="button">تحديث العرض</button>
+      </div>
+    </div>
   </div>
+
+  <main>
+    <div class="summary">
+      <div class="pill"><span class="dot"></span><strong id="visibleCount">28</strong> شاشة معروضة</div>
+      <div class="pill">تحديث البيانات: <strong>كل ساعة</strong></div>
+      <div class="pill">آخر فحص محلي: <strong id="lastCheck">الآن</strong></div>
+    </div>
+    <section class="grid" id="grid" aria-label="شاشات البلديات"></section>
+    <div class="empty" id="empty">لا توجد شاشة مطابقة للبحث.</div>
+  </main>
+
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="معاينة الشاشة">
+    <div class="modal-box">
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle"></div>
+        <button class="close" id="close" aria-label="إغلاق">×</button>
+      </div>
+      <img id="modalImage" alt="">
+    </div>
+  </div>
+
+  <script>
+    const screenNames = [
+      "الشاشة 1","الشاشة 2","الشاشة 3","الشاشة 4","الشاشة 5","الشاشة 6","الشاشة 7",
+      "الشاشة 8","الشاشة 9","الشاشة 10","الشاشة 11","الشاشة 12","الشاشة 13","الشاشة 14",
+      "الشاشة 15","الشاشة 16","الشاشة 17","الشاشة 18","الشاشة 19","الشاشة 20","الشاشة 21",
+      "الشاشة 22","الشاشة 23","الشاشة 24","الشاشة 25","الشاشة 26","الشاشة 27","الشاشة 28"
+    ];
+
+    const grid = document.getElementById("grid");
+    const modal = document.getElementById("modal");
+    const modalImage = document.getElementById("modalImage");
+    const modalTitle = document.getElementById("modalTitle");
+    const stamp = () => Date.now();
+
+    function buildCards() {
+      grid.innerHTML = screenNames.map((name, index) => {
+        const n = index + 1;
+        return `
+          <article class="card" data-search="${name} ${n}">
+            <div class="preview" data-screen="${n}" data-name="${name}">
+              <img src="screens/screen-${n}.png?t=${stamp()}" alt="${name}" loading="lazy">
+              <span class="screen-no">رقم ${n}</span>
+              <span class="live">محدّثة</span>
+            </div>
+            <div class="card-body">
+              <h2 class="municipality">${name}</h2>
+              <div class="meta">
+                <span>لوحة بيانات البلدية</span>
+                <a class="open-link" href="screen-${n}.html" target="_blank" rel="noopener">فتح منفصل ↗</a>
+              </div>
+            </div>
+          </article>`;
+      }).join("");
+      bindPreviews();
+    }
+
+    function bindPreviews() {
+      document.querySelectorAll(".preview").forEach(preview => {
+        preview.addEventListener("click", () => {
+          const n = preview.dataset.screen;
+          modalTitle.textContent = preview.dataset.name + " — الشاشة " + n;
+          modalImage.src = "screens/screen-" + n + ".png?t=" + stamp();
+          modalImage.alt = preview.dataset.name;
+          modal.classList.add("open");
+        });
+      });
+    }
+
+    function refreshImages() {
+      document.querySelectorAll(".preview img").forEach((img, index) => {
+        img.src = "screens/screen-" + (index + 1) + ".png?t=" + stamp();
+      });
+      document.getElementById("lastCheck").textContent =
+        new Intl.DateTimeFormat("ar-SA",{hour:"2-digit",minute:"2-digit"}).format(new Date());
+    }
+
+    document.getElementById("search").addEventListener("input", event => {
+      const query = event.target.value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll(".card").forEach(card => {
+        const show = card.dataset.search.toLowerCase().includes(query);
+        card.style.display = show ? "" : "none";
+        if (show) visible++;
+      });
+      document.getElementById("visibleCount").textContent = visible;
+      document.getElementById("empty").style.display = visible ? "none" : "block";
+    });
+
+    document.getElementById("refresh").addEventListener("click", refreshImages);
+    document.getElementById("close").addEventListener("click", () => modal.classList.remove("open"));
+    modal.addEventListener("click", event => { if (event.target === modal) modal.classList.remove("open"); });
+    document.addEventListener("keydown", event => { if (event.key === "Escape") modal.classList.remove("open"); });
+
+    buildCards();
+    setInterval(refreshImages, 5 * 60 * 1000);
+  </script>
 </body>
 </html>
