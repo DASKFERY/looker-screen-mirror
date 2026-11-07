@@ -1,3 +1,4 @@
+# One-time push trigger: run the dashboard capture immediately.
 name: Capture and publish dashboards
 
 on:
